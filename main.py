@@ -65,7 +65,27 @@ def seed(c):
         wid=cur.lastrowid
         for s,v in [('English',86),('Communication',91),('Excel',82),('Typing',94)]: cur.execute('INSERT INTO skills(worker_id,name,score) VALUES(?,?,?)',(wid,s,v))
     if cur.execute('SELECT COUNT(*) FROM clients').fetchone()[0]==0:
-        cur.execute("INSERT INTO clients(company_name,industry,contact_name,email,phone) VALUES(?,?,?,?,?)",('Demo Client Co.','E-commerce','Client Manager','client@demo.local','01000000001'))
+        cur.execute(
+    """
+    INSERT INTO clients(
+        company_name,
+        industry,
+        contact_name,
+        email,
+        phone,
+        created_at
+    )
+    VALUES(?,?,?,?,?,?)
+    """,
+    (
+        'Demo Client Co.',
+        'E-commerce',
+        'Client Manager',
+        'client@demo.local',
+        '01000000001',
+        datetime.utcnow().isoformat()
+    )
+)
     if cur.execute('SELECT COUNT(*) FROM assessments').fetchone()[0]==0:
         cur.execute("INSERT INTO assessments(title,category,passing_score) VALUES(?,?,?)",('General Digital Skills','General',70)); aid=cur.lastrowid
         qs=[('Which tool is commonly used for spreadsheets?','Excel|Photoshop|Git|Figma','Excel'),('What does KPI stand for?','Key Performance Indicator|Knowledge Process Index|Key Project Input|None','Key Performance Indicator'),('Which is a strong password?','12345678|password|Mango#47River!|qwerty','Mango#47River!')]
